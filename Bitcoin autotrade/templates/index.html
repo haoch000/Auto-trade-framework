@@ -1,0 +1,86 @@
+<html>
+    <head>
+        <title> Coninview</title>
+        <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+    </head>
+
+    <body>
+        <h1>Candleline</h1>
+
+        <div id='chart'></div>
+
+        <div id='trade'></div>
+
+        <div style="border: solid black 1px; padding: 20px; width: 600px; margin: 20px;">
+            <h3>Buy Crypto</h3>
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class=flashes>
+                        {% for message in messages %}
+                        <li>{{ message }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                    {% endwith %}
+
+
+            <form action="/buy" method="post">
+                <input type="text" id="quantity" name='quantity' placeholder='eg. 0.001'/>
+                <select id="symbol" name="symbol">
+                    {% for symbol in symbols %}
+                        <option>{{symbol['symbol']}}</option>
+                    {% endfor%}
+                </select>
+                <input type="submit" name="buy" value="buy"/>
+            </form>
+        </div>
+        <div id="my_balances">
+            <h2>Balances</h2>
+            my_balances
+            <table>
+                {% for balance in my_balances %}
+                <tr>
+                    <td>
+                        {{ balance['asset'] }}
+                    </td>
+                    <td>
+                        {{ balance['free'] }}
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </table>
+            
+        </div>
+
+        <h2>Settings</h2>
+
+        <div id='settings'>
+            <input type='checkbox'/> RSI
+            <input type='text' id = 'rsi_length' name='rsi_length' placeholder="14"/>
+            Oversold
+            <input type='text' id = 'rsi_oversold' name='rsi_oversold' placeholder="30"/>
+            Overbought
+            <input type='text' id = 'rsi_overbought' name='rsi_overbought' placeholder="70"/>
+        </div>
+
+<!--         <script>
+            var coin='btc'
+            var interval='1m'
+            var bianceSocket = new WebSocket (`wss://stream.binance.com:9443/ws/${coin}usdt@kline_${interval}`)
+            //var bianceSocket = new WebSocket ("wss://stream.binance.com:9443/ws/btcusdt@kline_1m")
+
+            var CandleDiv= document.getElementById('Candleline')
+
+            bianceSocket.onmessage = function (event) {
+                console.log(event.data)
+
+                var messageObject = JSON.parse(event.data)
+
+                CandleDiv.append(messageObject.E)
+            }
+        </script> -->
+
+        <script src="{{ url_for ('static', filename='chart.js') }}"></script>
+    </body>
+</html>
